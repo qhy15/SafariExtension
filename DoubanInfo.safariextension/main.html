@@ -1,0 +1,56 @@
+ <!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <title>extension bar page</title>
+   <script type="text/javascript">
+   
+   safari.application.addEventListener('command', performCommand, false);
+   safari.application.addEventListener("message", handleEvent, false);
+ 
+   var book_url='http://book.douban.com/subject_search?cat=1001&search_text='
+   var movie_url='http://movie.douban.com/subject_search?cat=1002&search_text='
+   var music_url='http://music.douban.com/subject_search?cat=1003&search_text='
+   
+   var selected = "空"
+	   var command = "错误指令"
+		
+   function performCommand(event) {
+	   command = event.command;
+	   safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("XQDB_getselection", "");           
+   }
+  
+   function handleEvent(event) {
+
+       var messageName = event.name;
+       var messageData = event.message;
+	   
+       if (messageName === "XQDB_theselection") {
+           selected = messageData;
+		   
+		   if (command === "searchBook") {
+			   var newTab = safari.application.activeBrowserWindow.openTab();
+   		       if (newTab)
+				   newTab.url = book_url+selected;
+		   }
+		   if (command === "searchMusic") {
+			   var newTab = safari.application.activeBrowserWindow.openTab();
+			   if (newTab)
+				   newTab.url = music_url+selected;
+		   }
+		   if (command === "searchMovie") {
+			   var newTab = safari.application.activeBrowserWindow.openTab();
+			   if (newTab)
+				   newTab.url = music_url+selected;
+   		   }
+       }
+	         
+   }  
+      
+   </script>
+</head>
+<body>
+   <input type="button" value="Increment 0"
+    onclick="doButton();" id="myButton" >
+</body>
+</html>
